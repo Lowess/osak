@@ -1,0 +1,139 @@
+#compdef osaka
+#autoload
+
+_commands=(
+    'hugo:Run Hugo toolbox'
+    'terraform: Run Terraform toolbox'
+    'ansible: Run Ansible toolbox'
+    'molecule: Run molecule toolbox'
+)
+
+_global_commands=(
+  'add:Installs a package and any packages that it depends on'
+  'bin:Displays the location of the yarn bin folder'
+  'remove:Remove installed package from dependencies updating package.json'
+  'upgrade:Upgrades packages to their latest version based on the specified range'
+  'upgrade-interactive'
+)
+
+_osaka_commands() {
+    _describe 'command' _commands
+}
+
+_hugo_commands(){
+    _hugo_commands=(
+      'benchmark:Benchmark Hugo by building a site a number of times'
+      'config:Print the site configuration'
+      'convert:Convert your content to different formats'
+      'env:Print Hugo version and environment info'
+      'gen:A collection of several useful generators'
+      'help:Help about any command'
+      'import:Import your site from others'
+      'list:Listing out various types of content'
+      'new:Create new content for your site'
+      'server:A high performance webserver'
+      'version:Print the version number of Hugo'
+    )
+    _describe 'command' _hugo_commands
+}
+_osaka() {
+    local context state state_descr line
+
+    typeset -A opt_args
+
+      _arguments \
+        '1: :_osaka_commands' \
+        '*:: :->command_args'
+
+    # Osaka Autocompletion
+    case $state in command_args)
+        case $words[1] in
+            'hugo')
+                _arguments \
+                    '1: :_hugo_commands' \
+                    '*:: :->hugo_args'
+            ;;
+        esac
+    esac
+
+    # Hugo Autocompletion
+    case $state in hugo_args)
+        case $words[1] in
+            'new')
+                _arguments \
+                    '--kind[Kind page to create]:arg:(chapter)' \
+                    ':filename:'
+            ;;
+        esac
+    esac
+
+    # Terraform Autocompletion
+    case $state in terraform_args)
+        case $words[1] in
+            *)
+            ;;
+        esac
+    esac
+
+    # Ansible Autocompletion
+    case $state in ansible_args)
+        case $words[1] in
+            *)
+            ;;
+        esac
+    esac
+
+    # Molecule Autocompletion
+    case $state in molecule_args)
+        case $words[1] in
+            *)
+            ;;
+        esac
+    esac
+
+}
+
+    # case "${CURRENT}" in
+    #     2)
+    #         _describe -t commands "osaka subcommand" _1st_arguments
+    #         return
+    #         ;;
+    #     3)
+    #         case "$words[2]" in
+    #             ansible)
+    #                 _arguments \
+    #                     '*:playbook:_files'
+    #                 ;;
+    #             hugo)
+    #                 subcmds=(
+    #                     'create:Create a new chapter'
+    #                     'run:Run the hugo server'
+    #                 )
+    #                 _describe 'command' subcmds
+    #                 ;;
+    #             molecule)
+    #                 subcmds=(
+    #                     'check:Use the provisioner to perform a Dry-Run...'
+    #                     'converge:Use the provisioner to configure instances...'
+    #                     'create:Use the provisioner to start the instances.'
+    #                     'dependency:Manage the roles dependencies.'
+    #                     'destroy:Use the provisioner to destroy the instances.'
+    #                     'idempotence:Use the provisioner to configure the...'
+    #                     'init:Initialize a new role or scenario.'
+    #                     'lint:Lint the role.'
+    #                     'list:Lists status of instances.'
+    #                     'login:Log in to one instance.'
+    #                     'prepare:Use the provisioner to prepare the instances...'
+    #                     'side-effect:Use the provisioner to perform side-effects...'
+    #                     'sync-requirements:Sync the requirements-drone.yml from requirements-local.yml.'
+    #                     'syntax:Use the provisioner to syntax check the role.'
+    #                     'test:Test (lint, destroy, dependency, syntax,...'
+    #                     'verify:Run automated tests against instances.'
+    #                 )
+    #                 _describe 'command' subcmds
+    #                 ;;
+    #         esac
+    #         ;;
+    # esac
+
+compdef _osaka osaka
